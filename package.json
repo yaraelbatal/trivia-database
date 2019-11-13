@@ -1,0 +1,23 @@
+{
+  "name": "trivia-database",
+  "version": "1.0.0",
+  "description": "Building a trivia database with MongoDB.",
+  "main": "database-initializer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nooowei/trivia-database.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nooowei/trivia-database/issues"
+  },
+  "homepage": "https://github.com/nooowei/trivia-database#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongodb": "^3.3.4"
+  }
+}
