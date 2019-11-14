@@ -14,4 +14,6 @@ mc.connect("mongodb://localhost:27017", function(err, client) {
 	}
   // select the questions database
   db = client.db("a4");
+  app.listen(3000);
+	console.log("Server listening on port 3000");
 }
