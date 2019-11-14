@@ -4,16 +4,46 @@ const mc = require("mongodb").MongoClient;
 const ObjectId = require('mongodb').ObjectId;
 
 // load 25 questions based on the parameters given
-router.get('/', loadQuestions);
+router.get('/', [getDropDownArr, loadQuestions]);
 
 // load a specific question with the qid
 router.get("/:qid", loadSpecQuestion);
 
+let catArr = [];  //category array
+let difArr = [];  //difficulty array
+let queArr = [];  //question array
 
+function getDropDownArr(req, res, next){
+  db.collection("questions").find({}).toArray(function(err, docs){
+    if (err){
+      throw err;
+    }
+
+    for(i in docs){
+      //console.log(docs[i].category);
+      if(!catArr.includes(docs[i].category)){
+        catArr.push(docs[i].category);
+      }
+      if(!difArr.includes(docs[i].difficulty)){
+        difArr.push(docs[i].difficulty);
+      }
+    }
+
+    catArr.sort();
+    difArr.sort();
+    // converting catArr to JSON
+    catArr.forEach(function(part, index){
+      this[index] = {"category" : this[index]};
+    }, catArr);
+
+    console.log(JSON.stringify(catArr));
+    // console.log(difArr);
+  });
+  next();
+}
 
 function loadQuestions(req, res, next){
-  // create an question array
-  let queArr = [];
+
 
   let cat = req.query.category;
   let dif = req.query.difficulty;
@@ -44,10 +74,19 @@ function loadQuestions(req, res, next){
         if(queArr.length > 25){
           queArr = queArr.slice(0, 25);
         }
-        res.format({
-          //"text/html": () => {res.status(200).send(createHTML(res.users, req))},
-          "application/json": () => {res.status(200).json(queArr)}
+        // console.log(catArr);  //working
+        res.render('pages/questions', {
+          category : JSON.stringify(catArr)
+
         });
+
+        // res.format({
+        //   //"text/html": () => {res.status(200).send(createHTML(res.users, req))},
+        //   "application/json": () => {res.status(200).json(queArr)}
+        // });
+
+        // TODO: delete after
+        next();
       });
       // client.close();
     }

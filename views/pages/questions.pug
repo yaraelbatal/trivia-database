@@ -1,0 +1,11 @@
+html
+  head
+    title Trivia Database Questions
+
+  script(src='../../questions-router.js')
+  body
+  p category
+  - let category = JSON.parse(category)
+  ul
+    each item in category
+      li = item
