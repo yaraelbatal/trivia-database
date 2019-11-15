@@ -77,7 +77,7 @@ app.get('/questions', function(req, res){
           queArr = queArr.slice(0, 25);
         }
 
-        console.log(queArr);
+        //console.log(queArr);
         res.format({
           "text/html": () => {res.status(200).render('pages/questions', {questions:queArr})},
           "application/json": () => {res.status(200).json(queArr)}
@@ -144,8 +144,9 @@ app.get('/questions', function(req, res){
           queArr = queArr.slice(0, 25);
         }
         res.format({
-          "text/html": () => {res.status(200).render('pages/questions', {questions:queArr})},
-          "application/json": () => {res.status(200).json(queArr)}
+          "application/json": () => {res.status(200).json(queArr)},
+          "text/html": () => {res.status(200).render('pages/questions', {questions:queArr})}
+
         });
       });
       // client.close();
@@ -154,9 +155,30 @@ app.get('/questions', function(req, res){
   console.log('submitted1');
   console.log(req.body);
 
-})
+});
 
+app.get('/questions/:qID', function(req, res){
+  let qID = req.params.qID;
 
+  mc.connect("mongodb://localhost:27017", function(err, client){
+    if (err) {
+      console.log("Error in connecting to database");
+      console.log(err);
+      return;
+    }
+    // selecting the databse
+    db = client.db("a4");
+    db.collection("questions").find({"_id" : ObjectId(qID)}).toArray(function(err, docs){
+      if (err){
+        throw err;
+      }
+      res.format({
+        "text/html": () => {res.status(200).render('pages/questions', {questions:docs})},
+        "application/json": () => {res.status(200).json(docs)}
+      });
+    });
+  });
+});
 
 
 

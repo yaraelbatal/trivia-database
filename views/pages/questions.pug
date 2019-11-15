@@ -3,10 +3,10 @@ html
     title Trivia Database Questions
   body
     each item in questions
-      p #{item.category}
-      p #{item.difficulty}
-      p #{item.question}
-      p #{item.correct_answer}
-      p #{item.incorrect_answers}
+      p Category: #{item.category}
+      p Difficulty: #{item.difficulty}
+      a(href='http://localhost:3000/questions/'+item._id) Question: #{item.question}
+      p Correct Answer: #{item.correct_answer}
+      p Incorrect Answers: #{item.incorrect_answers}
       br
       br
