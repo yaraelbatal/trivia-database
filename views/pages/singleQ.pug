@@ -1,0 +1,12 @@
+html
+  head
+    title Trivia Database Questions
+  body
+    each item in questions
+      p Question: #{item.question}
+      p Category: #{item.category}
+      p Difficulty: #{item.difficulty}
+      p Correct Answer: #{item.correct_answer}
+      p Incorrect Answers: #{item.incorrect_answers}
+      br
+      br

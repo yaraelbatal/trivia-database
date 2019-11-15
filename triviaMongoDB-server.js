@@ -25,6 +25,9 @@ app.get('/', function(req, res){
   res.render('pages/index');
 });
 
+app.get('/triviaMongoDB-server.js', function(req, res){
+  console.log("hello");
+})
 
 app.get('/getQ', function(req, res){
   // getDropDownArr function
@@ -173,7 +176,7 @@ app.get('/questions/:qID', function(req, res){
         throw err;
       }
       res.format({
-        "text/html": () => {res.status(200).render('pages/questions', {questions:docs})},
+        "text/html": () => {res.status(200).render('pages/singleQ', {questions:docs})},
         "application/json": () => {res.status(200).json(docs)}
       });
     });
