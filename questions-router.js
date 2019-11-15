@@ -54,17 +54,6 @@ function loadQuestions(req, res, next){
 
   let cat = req.query.category;  // pulls from query
   let dif = req.query.difficulty;  // pull from query
-  //
-  // let cat = document.getElementByID('category');  //pull from html
-  // let dif = document.getElementByID('difficulty');  //pull from html
-  // let submit = document.getElementByID('getQuestion');
-  // //
-  // document.addEventListener('click', function(){
-  //   alert("HELLO");
-  // });
-
-  // console.log(`cat is ${cat}`);
-  // console.log(`dif is ${dif}`);
 
   // search the database to find fitting questions
   //  Connect to database

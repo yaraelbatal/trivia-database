@@ -1,0 +1,22 @@
+html
+  head
+    title Trivia Database Questions
+  body
+
+    block content
+    form(method='GET', action='/questions')
+      #form-group
+        label Category
+        select(name='category')
+          option(disabled selected value)
+          each item in category
+            option(value=item) #{item}
+        br
+        br
+      #form-group
+        label Difficulty
+        select(name='difficulty')
+          option(disabled selected value)
+          each item in difficulty
+            option(value=item) #{item}
+      input(type='submit' value='Submit')

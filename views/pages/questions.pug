@@ -1,24 +1,12 @@
 html
   head
     title Trivia Database Questions
-  script(type='text/javascript' src='/questions-router.js')
   body
-
-    block content
-    form(method='GET', action='/questions')
-      #form-group
-        label Category
-        select(id='category')
-          option(disabled selected value)
-          each item in category
-            option(value=item) #{item}
-
-        br
-        br
-      #form-group
-        label Difficulty
-        select(id='difficulty')
-          option(disabled selected value)
-          each item in difficulty
-            option(value=item) #{item}
-      input(id='submit' type='submit' value='Submit')
+    each item in questions
+      p #{item.category}
+      p #{item.difficulty}
+      p #{item.question}
+      p #{item.correct_answer}
+      p #{item.incorrect_answers}
+      br
+      br
