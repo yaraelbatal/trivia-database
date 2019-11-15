@@ -1,0 +1,53 @@
+html
+  head
+    title Create Quiz
+
+  body
+    block content
+    form(method='GET', action='/savequiz')
+      #form-group
+        label Creator
+        input(name="creator" type='text')
+      br
+      #form-group
+        label Tags
+        input(name="tags" type='text')
+      input(type='submit' value='Save Quiz')
+
+
+    block content
+    form(method='GET', action='/remFromQuiz')
+      <h3> Questions in Quiz
+      #form-group
+        each que in quizArray
+          input(type='chekcbox' name=que._id value=que._id href='http://localhost:3000/questions/'+que._id)
+          a(href='http://localhost:3000/questions/'+que._id) #{que.question}
+      input(type='submit' value='Remove Questions')
+      
+
+    block content
+    form(method='GET', action='/loadQs')
+      <h3> Search / Add New Questions
+      #form-group
+        label Category
+        select(name='category')
+          option(disabled selected value)
+          each item in category
+            option(value=item) #{item}
+      br
+      #form-group
+        label Difficulty
+        select(name='difficulty')
+          option(disabled selected value)
+          each item in difficulty
+            option(value=item) #{item}
+      input(type='submit' value='Get Questions')
+
+
+    block content
+    form(method='GET', action='/addToQuiz')
+      #form-group
+      each que in queArray
+        input(type='chekcbox' name=que._id value=que._id)
+        a(href='http://localhost:3000/questions/'+que._id) #{que.question}
+      input(type='submit' value='Add To Quiz')

@@ -20,15 +20,18 @@ app.use(bodyParser.json());
 let catArr = [];  //category array
 let difArr = [];  //difficulty array
 let queArr = [];  //question array
+let quizArr = []; //quiz array
 
 app.get('/', function(req, res){
   res.render('pages/index');
+
 });
 
 app.get('/triviaMongoDB-server.js', function(req, res){
   console.log("hello");
-})
 
+
+})
 app.get('/getQ', function(req, res){
   // getDropDownArr function
   db.collection("questions").find({}).toArray(function(err, docs){
@@ -183,7 +186,9 @@ app.get('/questions/:qID', function(req, res){
   });
 });
 
-
+app.get('/createquiz', function(req, res){
+  res.status(200).render('pages/createquiz', {category:catArr, difficulty:difArr, quizArray:quizArr, queArray:queArr});
+});
 
 
 
