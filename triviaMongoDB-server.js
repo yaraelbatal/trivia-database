@@ -34,24 +34,7 @@ app.get('/triviaMongoDB-server.js', function(req, res){
 })
 app.get('/getQ', function(req, res){
   // getDropDownArr function
-  db.collection("questions").find({}).toArray(function(err, docs){
-    if (err){
-      throw err;
-    }
-
-    for(i in docs){
-      //console.log(docs[i].category);
-      if(!catArr.includes(docs[i].category)){
-        catArr.push(docs[i].category);
-      }
-      if(!difArr.includes(docs[i].difficulty)){
-        difArr.push(docs[i].difficulty);
-      }
-    }
-
-    catArr.sort();
-    difArr.sort();
-  });
+  loadDropDown();
   res.render('pages/getQ', {
     category : catArr,
     difficulty: difArr
@@ -211,6 +194,48 @@ app.get('/createquiz', function(req, res){
 
 // router for getting Get Question in the createquiz page
 app.get('/loadQs', function(req, res){
+  // function for loading drop down menu;
+  loadDropDown();
+  loadDatabaseQs(req, res);
+})
+
+// router for Add to Quiz in the createquiz page
+app.get('/addToQuiz', function(req, res){
+  // check if there are more than 1 toBeAdded items (i.e. in an array)
+  let toBeAdded = req.query.toBeAdded;
+  if(!Array.isArray(toBeAdded)){
+    toBeAdded = [toBeAdded];
+  }
+  console.log(toBeAdded);
+
+  // delete selected item from queArr, and add to quizArr
+
+  res.status(200).render('pages/createquiz', {category:catArr, difficulty:difArr, quizArray:quizArr, queArray:queArr});
+})
+
+function loadDropDown(){
+  // getDropDownArr function
+  db.collection("questions").find({}).toArray(function(err, docs){
+    if (err){
+      throw err;
+    }
+
+    for(i in docs){
+      //console.log(docs[i].category);
+      if(!catArr.includes(docs[i].category)){
+        catArr.push(docs[i].category);
+      }
+      if(!difArr.includes(docs[i].difficulty)){
+        difArr.push(docs[i].difficulty);
+      }
+    }
+  })
+
+    catArr.sort();
+    difArr.sort();
+}
+
+function loadDatabaseQs(req, res){
   //loadQuestions function
   let cat = req.query.category;  // pulls from query
   let dif = req.query.difficulty;  // pull from query
@@ -291,13 +316,7 @@ app.get('/loadQs', function(req, res){
       // client.close();
     }
   });
-})
-
-
-
-
-
-
+}
 
 
 
