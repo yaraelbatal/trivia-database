@@ -201,6 +201,15 @@ app.get('/loadQs', function(req, res){
 
 // router for Add to Quiz in the createquiz page
 app.get('/addToQuiz', function(req, res){
+  loadDropDown();
+  loadDatabaseQs(req, res);
+
+  //TODO: go through the queArr, make sure none of the Qs in quizArr are in queArr
+  //use 2 for loops to go through it !
+
+
+
+
   // check if there are more than 1 toBeAdded items (i.e. in an array)
   let toBeAdded = req.query.toBeAdded;
   if(!Array.isArray(toBeAdded)){
@@ -208,7 +217,10 @@ app.get('/addToQuiz', function(req, res){
   }
   console.log(toBeAdded);
 
-  // delete selected item from queArr, and add to quizArr
+  // TODO: delete selected item from queArr, and add to quizArr
+
+
+  
 
   res.status(200).render('pages/createquiz', {category:catArr, difficulty:difArr, quizArray:quizArr, queArray:queArr});
 })
@@ -235,6 +247,7 @@ function loadDropDown(){
     difArr.sort();
 }
 
+//function for load database questions, for createquiz page only!
 function loadDatabaseQs(req, res){
   //loadQuestions function
   let cat = req.query.category;  // pulls from query
