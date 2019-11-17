@@ -89,7 +89,7 @@ app.get('/questions', function(req, res){
           "application/json": () => {res.status(200).json(queArr)}
         });
 
-        console.log(req.body);
+        //console.log(req.body);
         // TODO: delete after
         // next();
       });
@@ -187,9 +187,111 @@ app.get('/questions/:qID', function(req, res){
 });
 
 app.get('/createquiz', function(req, res){
+  // load the dropdown options
+  db.collection("questions").find({}).toArray(function(err, docs){
+    if (err){
+      throw err;
+    }
+
+    for(i in docs){
+      //console.log(docs[i].category);
+      if(!catArr.includes(docs[i].category)){
+        catArr.push(docs[i].category);
+      }
+      if(!difArr.includes(docs[i].difficulty)){
+        difArr.push(docs[i].difficulty);
+      }
+    }
+
+    catArr.sort();
+    difArr.sort();
+  });
   res.status(200).render('pages/createquiz', {category:catArr, difficulty:difArr, quizArray:quizArr, queArray:queArr});
 });
 
+// router for getting Get Question in the createquiz page
+app.get('/loadQs', function(req, res){
+  //loadQuestions function
+  let cat = req.query.category;  // pulls from query
+  let dif = req.query.difficulty;  // pull from query
+
+  mc.connect("mongodb://localhost:27017", function(err, client) {
+  	if (err) {
+  		console.log("Error in connecting to database");
+  		console.log(err);
+  		return;
+  	}
+    // selecting the databse
+    db = client.db("a4");
+
+    // if no query is provided, find all documents
+    if(typeof cat == 'undefined' && typeof dif == 'undefined'){
+      db.collection("questions").find({}).toArray(function(err, docs){
+        if (err){
+          throw err;
+        }
+        queArr = docs.slice();
+        if(queArr.length > 25){
+          queArr = queArr.slice(0, 25);
+        }
+
+        res.status(200).render('pages/createquiz', {category:catArr, difficulty:difArr, quizArray:quizArr, queArray:queArr});
+      });
+      // client.close();
+    }
+
+    // if only category is provided
+    else if(typeof cat != 'undefined' && typeof dif == 'undefined'){
+      db.collection("questions").find({'category' : cat}).toArray(function(err, docs){
+        if (err){
+          throw err;
+        }
+        // console.log("found the questions!");
+        // console.log(docs);
+        queArr = docs.slice();
+        if(queArr.length > 25){
+          queArr = queArr.slice(0, 25);
+        }
+        res.status(200).render('pages/createquiz', {category:catArr, difficulty:difArr, quizArray:quizArr, queArray:queArr});
+      });
+      // client.close();
+    }
+
+    // if only difficulty provided
+    else if(typeof cat == 'undefined' && typeof dif != 'undefined'){
+      db.collection("questions").find({'difficulty' : dif}).toArray(function(err, docs){
+        if (err){
+          throw err;
+        }
+        // console.log("found the questions!");
+        // console.log(docs);
+        queArr = docs.slice();
+        if(queArr.length > 25){
+          queArr = queArr.slice(0, 25);
+        }
+        res.status(200).render('pages/createquiz', {category:catArr, difficulty:difArr, quizArray:quizArr, queArray:queArr});
+      });
+      // client.close();
+    }
+
+    // if both query provided, use query filter
+    else if(cat != '' && dif != ''){
+      db.collection("questions").find({'category' : cat, 'difficulty' : dif}).toArray(function(err, docs){
+        if (err){
+          throw err;
+        }
+        //console.log("found the questions!");
+        //console.log(docs);
+        queArr = docs.slice();
+        if(queArr.length > 25){
+          queArr = queArr.slice(0, 25);
+        }
+        res.status(200).render('pages/createquiz', {category:catArr, difficulty:difArr, quizArray:quizArr, queArray:queArr});
+      });
+      // client.close();
+    }
+  });
+})
 
 
 
