@@ -443,7 +443,85 @@ app.get('/quizzes', function(req, res){
     }
   });
 
-})
+});
+
+app.post('/quizzes', function(req, res){
+  let creator = req.query.creator;
+  let tags = req.query.tags;
+  let questions = req.query.questions;
+
+  if(typeof creator == 'undefined' || typeof tags == 'undefined' || typeof questions == 'undefined'){
+    console.log("there is an error in query");
+    return;
+  }
+
+  //converting parameters to lowercase
+  if(typeof tags != "undefined"){
+    tags = [tags];
+  }
+  if(typeof creator != "undefined"){
+    creator = creator.toLowerCase();
+  }
+  for(i in tags){
+    if(typeof tags[i] != "undefined"){
+      tags[i] = tags[i].toLowerCase();
+    }
+  }
+  if(typeof questions != 'undefined'){
+    questions = [questions];
+  }
+
+  // add condition to verify the question from Database
+
+
+
+  //add the quiz to database
+  let quiz = {
+    creator: creator,
+    tags: tags,
+    questions: questions
+  }
+
+  //add to quizzes db
+  mc.connect("mongodb://localhost:27017", function(err, client) {
+  	if (err) {
+  		console.log("Error in connecting to database");
+  		console.log(err);
+  		return;
+  	}
+    db = client.db('a4');
+    db.collection("quizzes").insertOne(quiz, function(err, result){
+      if(err) throw err;
+      console.log("Successfuly inserted quiz.")
+    });
+  });
+
+});
+
+app.get("/quiz/:quizID"){
+  let quizID = req.params.quizID;
+
+  mc.connect("mongodb://localhost:27017", function(err, client){
+    if (err) {
+      console.log("Error in connecting to database");
+      console.log(err);
+      return;
+    }
+    // selecting the databse
+    db = client.db("a4");
+    db.collection("quizzes").find({"_id" : ObjectId(qID)}).toArray(function(err, docs){
+      if (err){
+        throw err;
+      }
+      res.format({
+        "text/html": () => {res.status(200).render('pages/singleQ', {questions:docs})},
+        "application/json": () => {res.status(200).json(docs)}
+      });
+    });
+  });
+}
+
+
 
 
 function loadDropDown(){
