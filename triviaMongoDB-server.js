@@ -346,7 +346,103 @@ app.get('/savequiz', function(req, res){
 });
 
 app.get('/quizzes', function(req, res){
-  
+  let creator = req.query.creator;
+  let tags = req.query.tags;
+
+
+  //converting parameters to lowercase
+  if(typeof tags != "undefined"){
+    tags = [tags];
+  }
+  if(typeof creator != "undefined"){
+    creator = creator.toLowerCase();
+  }
+  for(i in tags){
+    if(typeof tags[i] != "undefined"){
+      tags[i] = tags[i].toLowerCase();
+    }
+  }
+
+  console.log(creator);
+  console.log("type of creator is: ");
+  console.log(typeof creator);
+
+  console.log(tags);
+  console.log("typeof tags is: ");
+  console.log(typeof tags);
+
+  mc.connect("mongodb://localhost:27017", function(err, client) {
+  	if (err) {
+  		console.log("Error in connecting to database");
+  		console.log(err);
+  		return;
+  	}
+    // selecting the databse
+    db = client.db("a4");
+
+    // if no query is provided, find all documents
+    if(typeof creator == 'undefined' && typeof tags == 'undefined'){
+      db.collection("quizzes").find({}).toArray(function(err, docs){
+        if (err){
+          throw err;
+        }
+        //console.log(queArr);
+        res.format({
+          "text/html": () => {res.status(200).render('pages/quizzes', {quizDB:docs})},
+          "application/json": () => {res.status(200).json(docs)}
+        });
+      });
+      // client.close();
+    }
+
+    // if only creator is provided
+    else if(typeof creator != 'undefined' && typeof tags == 'undefined'){
+      db.collection("quizzes").find({'creator' : creator}).toArray(function(err, docs){
+        if (err){
+          throw err;
+        }
+        console.log("Entered the 2nd condition");
+        console.log(docs);
+        res.format({
+          "text/html": () => {res.status(200).render('pages/quizzes', {quizDB:docs})},
+          "application/json": () => {res.status(200).json(docs)}
+        });
+      });
+      // client.close();
+    }
+
+    // if only creator provided
+    else if(typeof creator == 'undefined' && typeof tags != 'undefined'){
+      db.collection("quizzes").find({'creator' : creator}).toArray(function(err, docs){
+        if (err){
+          throw err;
+        }
+        //console.log(queArr.length);
+        res.format({
+          "text/html": () => {res.status(200).render('pages/quizzes', {quizDB:docs})},
+          "application/json": () => {res.status(200).json(docs)}
+        });
+      });
+      // client.close();
+    }
+
+    // if both query provided, use query filter
+    else if(creator != '' && typeof tags != 'undefined'){
+      db.collection("questions").find({'creator' : creator, 'tags' : {$in:tags}}).toArray(function(err, docs){
+        if (err){
+          throw err;
+        }
+        console.log("Entered the 4th condition");
+        console.log(docs);
+        res.format({
+          "text/html": () => {res.status(200).render('pages/quizzes', {quizDB:docs})},
+          "application/json": () => {res.status(200).json(docs)}
+        });
+      });
+      // client.close();
+    }
+  });
+
 })
 
 
