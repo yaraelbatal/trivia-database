@@ -1,0 +1,9 @@
+html
+  head
+    title Quizzes
+
+  body
+    block content
+    each q in quizDB
+      a(href='http://localhost:3000/quizzes/'+q._id) #{q.creator}
+      br

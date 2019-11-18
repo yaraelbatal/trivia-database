@@ -6,11 +6,11 @@ html
     block content
     form(method='GET', action='/savequiz')
       #form-group
-        label Creator
+        label Creator:
         input(name="creator" type='text')
       br
       #form-group
-        label Tags
+        label Tags:
         input(name="tags" type='text')
       input(type='submit' value='Save Quiz')
 
@@ -20,11 +20,12 @@ html
       <h3> Questions in Quiz
       #form-group
         each que in quizArray
-          input(type='checkbox' name="toBeRemoved" value=que)
-          a(href='http://localhost:3000/questions/'+que._id) #{que.question}
-          br
+          if que
+            input(type='checkbox' name="toBeRemoved" value=que)
+            a(href='http://localhost:3000/questions/'+que._id) #{que.question}
+            br
       input(type='submit' value='Remove Questions')
-      
+
 
     block content
     form(method='GET', action='/loadQs')
