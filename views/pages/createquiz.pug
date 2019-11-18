@@ -20,8 +20,9 @@ html
       <h3> Questions in Quiz
       #form-group
         each que in quizArray
-          input(type='checkbox' name=que._id value=que._id)
+          input(type='checkbox' name="toBeRemoved" value=que)
           a(href='http://localhost:3000/questions/'+que._id) #{que.question}
+          br
       input(type='submit' value='Remove Questions')
       
 
@@ -48,7 +49,7 @@ html
     form(method='GET', action='/addToQuiz')
       #form-group
       each que in queArray
-        input(type='checkbox' name="toBeAdded" value=que._id)
+        input(type='checkbox' name="toBeAdded" value=que)
         a(href='http://localhost:3000/questions/'+que._id) #{que.question}
         br
       input(type='submit' value='Add To Quiz')

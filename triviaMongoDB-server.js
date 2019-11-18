@@ -197,31 +197,60 @@ app.get('/loadQs', function(req, res){
   // function for loading drop down menu;
   loadDropDown();
   loadDatabaseQs(req, res);
+  res.status(200).render('pages/createquiz', {category:catArr, difficulty:difArr, quizArray:quizArr, queArray:queArr});
 })
 
 // router for Add to Quiz in the createquiz page
 app.get('/addToQuiz', function(req, res){
+  //testing
+  console.log("quizArr at the beginning of addToQuiz")
+  console.log(quizArr);
+
   loadDropDown();
   loadDatabaseQs(req, res);
 
   //TODO: go through the queArr, make sure none of the Qs in quizArr are in queArr
   //use 2 for loops to go through it !
-
-
-
+  for(i in queArr){
+    for(j in quizArr){
+      if(queArr[i] == quizArr[j]){
+        delete queArr[i];
+      }
+    }
+  }
 
   // check if there are more than 1 toBeAdded items (i.e. in an array)
   let toBeAdded = req.query.toBeAdded;
   if(!Array.isArray(toBeAdded)){
     toBeAdded = [toBeAdded];
   }
+  console.log("toBeAdded is:")
   console.log(toBeAdded);
 
-  // TODO: delete selected item from queArr, and add to quizArr
+  // TODO: add to quizArr
+  for(i in toBeAdded){
+    console.log("looping through toBeAdded");
+    if(!quizArr.includes(toBeAdded[i])){
+      quizArr.push(JSON.parse(toBeAdded[i]));
+    }
+    // mc.connect("mongodb://localhost:27017/", function(err, client) {
+    //    if(err) throw err;
+    //    db = client.db("a4");
+    //    db.collection("questions").findOne({"_id" : ObjectId(toBeAdded[i])}, function(err, result){
+    //      if(err) throw err;
+    // 		 if(!result){
+    // 		     console.log("That doesn't exist");
+    // 		 return;
+    // 		 }
+    //      console.log(result);
+    //      quizArr.push(result);
+    //    })
+    // });
+  }
 
-
-  
-
+  //testing
+  console.log("quizArr at the end of loadQs")
+  console.log(quizArr);
   res.status(200).render('pages/createquiz', {category:catArr, difficulty:difArr, quizArray:quizArr, queArray:queArr});
 })
 
@@ -273,7 +302,7 @@ function loadDatabaseQs(req, res){
           queArr = queArr.slice(0, 25);
         }
 
-        res.status(200).render('pages/createquiz', {category:catArr, difficulty:difArr, quizArray:quizArr, queArray:queArr});
+        // res.status(200).render('pages/createquiz', {category:catArr, difficulty:difArr, quizArray:quizArr, queArray:queArr});
       });
       // client.close();
     }
@@ -290,7 +319,7 @@ function loadDatabaseQs(req, res){
         if(queArr.length > 25){
           queArr = queArr.slice(0, 25);
         }
-        res.status(200).render('pages/createquiz', {category:catArr, difficulty:difArr, quizArray:quizArr, queArray:queArr});
+        // res.status(200).render('pages/createquiz', {category:catArr, difficulty:difArr, quizArray:quizArr, queArray:queArr});
       });
       // client.close();
     }
@@ -307,7 +336,7 @@ function loadDatabaseQs(req, res){
         if(queArr.length > 25){
           queArr = queArr.slice(0, 25);
         }
-        res.status(200).render('pages/createquiz', {category:catArr, difficulty:difArr, quizArray:quizArr, queArray:queArr});
+        // res.status(200).render('pages/createquiz', {category:catArr, difficulty:difArr, quizArray:quizArr, queArray:queArr});
       });
       // client.close();
     }
@@ -324,7 +353,7 @@ function loadDatabaseQs(req, res){
         if(queArr.length > 25){
           queArr = queArr.slice(0, 25);
         }
-        res.status(200).render('pages/createquiz', {category:catArr, difficulty:difArr, quizArray:quizArr, queArray:queArr});
+        // res.status(200).render('pages/createquiz', {category:catArr, difficulty:difArr, quizArray:quizArr, queArray:queArr});
       });
       // client.close();
     }
